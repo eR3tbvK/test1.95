@@ -1,9 +1,9 @@
 package client;
+
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.swing.*;
 
 public class InGame{
@@ -20,7 +20,6 @@ public class InGame{
 	private int playerIndex;
 	private UI userInterface;
 	private World world;
-	
 
 
 	private long startTime;
@@ -33,10 +32,8 @@ public class InGame{
 	private int maxFrameCount = 14;
 	private long targetTime = 1000 / FPS;
 
-	
-	public InGame(PlayerMob plyr){
-		player = plyr;
-		userInterface = new UI(plyr);
+
+	public InGame(){
 		layeredPane = new JLayeredPane();
 		background = new Background();
 		layeredPane.add(background,99);
@@ -44,13 +41,11 @@ public class InGame{
 		//world = new World();
 	}
 	
-	public InGame(){
-		
-	}
-	
+
 	
 	public void chat(JPanel panel){
 		this.panel = panel;
+		userInterface = new UI(player);
 		userInterface.chat(panel);	
 		
 		AddKeyListener keyListener = new AddKeyListener();
@@ -87,7 +82,11 @@ public class InGame{
 		startDrawingPanelThread();
 
 	}
-
+	
+	public void setPlayer(PlayerMob player){
+		this.player = player;
+	}
+	
 	public void startDrawingPanelThread(){
 		//System.out.println("Starting Drawing Panel Thread");
 		try{

@@ -35,19 +35,20 @@ public class Client {
 		ApplicationContext factory = new ClassPathXmlApplicationContext("spring.xml");
 		
 		networkStartup = netStart;
-		//loginPage = new Login(); 		//Make new object loginPage
-		loginPage = factory.getBean("loginPage",Login.class);
+		//loginPage = new Login(); 									//Make new object loginPage
+		loginPage = factory.getBean("loginPage",Login.class);		//Its like new Login() but you tell the factory to do it
 		loginPage.setPanel(panel);
-		loginPage.setNetObject(netStart); 		//Send the ChatClient object to loginPage
-		myChat = new ServerObject();				//Make new object called myChat
+		loginPage.setNetObject(netStart); 							//Send the ChatClient object to loginPage
+		myChat = new ServerObject();								//Make new object called myChat
 		player = new PlayerMob(netStart);
-		players = new ArrayList<PlayerMob>();	//Make an array list to hold all other players from server
+		players = new ArrayList<PlayerMob>();						//Make an array list to hold all other players from server
 		//background = new Background();
 		//backgrounds = new ArrayList<Background>();
 		usernames = new ArrayList<String>();
-		inGame = new InGame(player);		//Make new object inGame
-		inGame.setNetObject(netStart);		//Send the ChatClient object to inGame
-		setUpNetworking();						//call startUpNetworking
+		inGame = factory.getBean("inGame",InGame.class);			//Make new object inGame from the factory
+		inGame.setPlayer(player);
+		inGame.setNetObject(netStart);								//Send the ChatClient object to inGame
+		setUpNetworking();											
 		loginPage.login();
 	}
 

@@ -10,6 +10,7 @@
 <aop:aspectj-autoproxy />
 
 <bean id="loginPage" class="client.Login" />
+<bean id="inGame" class="client.inGame" />
 
 <bean name="loggingAspect" class="logging.loggingAspect"	/>
 
