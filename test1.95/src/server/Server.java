@@ -38,33 +38,33 @@ public class Server {
 		
 		//The object comes in from a client
 		public void run(){
-			Object o1 = null;
+			Object clientObject = null;
 			try{
-				while ((o1 = inStream.readUnshared()) != null){
+				while ((clientObject = inStream.readUnshared()) != null){
 					System.out.println(System.currentTimeMillis());
-					ServerObject info = (ServerObject) o1;
+					ServerObject serverObject = (ServerObject) clientObject;
 					//the casted fressh new object that came in
-					info.setArrayList(usernames);
-					if(info.getUsername().equals("undefined")){
+					serverObject.setArrayList(usernames);
+					if(serverObject.getUsername().equals("undefined")){
 						tellThisGuy(clientObjects,usernames.size());
 					}
-					if(!info.getUsername().equals("undefined") && info.getArrayList().indexOf(info.getUsername()) < 0){
-						System.out.println("New User Logged in: " + info.getUsername());
+					if(!serverObject.getUsername().equals("undefined") && serverObject.getArrayList().indexOf(serverObject.getUsername()) < 0){
+						System.out.println("New User Logged in: " + serverObject.getUsername());
 
-						usernames.add(info.getUsername());
-						clientObjects.add(info);
-						tellThisGuy(clientObjects,usernames.indexOf(info.getUsername()));
-						xCoordinates.add(info.getXCoordinate());
-						yCoordinates.add(info.getYCoordinate());
+						usernames.add(serverObject.getUsername());
+						clientObjects.add(serverObject);
+						tellThisGuy(clientObjects,usernames.indexOf(serverObject.getUsername()));
+						xCoordinates.add(serverObject.getXCoordinate());
+						yCoordinates.add(serverObject.getYCoordinate());
 					}
-					else if(!info.getUsername().equals("undefined") && usernames.indexOf(info.getUsername()) >= 0){
-						clientObjects.set(usernames.indexOf(info.getUsername()), info);
-						xCoordinates.set(usernames.indexOf(info.getUsername()),info.getXCoordinate());
-						yCoordinates.set(usernames.indexOf(info.getUsername()),info.getYCoordinate());
+					else if(!serverObject.getUsername().equals("undefined") && usernames.indexOf(serverObject.getUsername()) >= 0){
+						clientObjects.set(usernames.indexOf(serverObject.getUsername()), serverObject);
+						xCoordinates.set(usernames.indexOf(serverObject.getUsername()),serverObject.getXCoordinate());
+						yCoordinates.set(usernames.indexOf(serverObject.getUsername()),serverObject.getYCoordinate());
 					}
-					info.setArrayList(usernames);
+					serverObject.setArrayList(usernames);
 
-					tellEveryone(info);
+					tellEveryone(serverObject);
 					System.out.println(System.currentTimeMillis());
 				}
 			}
@@ -118,23 +118,28 @@ public class Server {
 
 							while(it.hasNext()){
 								out = (ObjectOutputStream) it.next();
-								
+								int removedIndex = clientOutputStreams.indexOf(out);
 								conTest.setArrayList(usernames);
-								conTest.setUsername(usernames.get(clientOutputStreams.indexOf(out)));
-								conTest.setXCoordinate(xCoordinates.get(clientOutputStreams.indexOf(out)));
-								conTest.setYCoordinate(yCoordinates.get(clientOutputStreams.indexOf(out)));
-								
+								if(usernames.size() < removedIndex) 
+								{
+									conTest.setUsername(usernames.get(removedIndex));
+									conTest.setXCoordinate(xCoordinates.get(removedIndex));
+									conTest.setYCoordinate(yCoordinates.get(removedIndex));
+								}
+									
 								try{
 									synchronized(out){out.writeUnshared(conTest);}
 								}catch(SocketException e){
 									System.err.println("Removing terminated user from clientOutputStreams the index is:" + clientOutputStreams.indexOf(out));
 
-									int removedIndex = clientOutputStreams.indexOf(out);
-
+									
+								if(usernames.size() < removedIndex) 
+									{
 									usernames.remove(removedIndex);;
 									clientObjects.remove(removedIndex);;
 									xCoordinates.remove(removedIndex);;
 									yCoordinates.remove(removedIndex);;
+									}
 									clientOutputStreams.remove(out);
 
 								}
