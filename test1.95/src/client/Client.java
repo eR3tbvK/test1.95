@@ -295,7 +295,8 @@ public class Client {
 							players.get(indexOfPlayer).updateCoordinates(serverObject);
 						}
 						else{
-							moveEveryoneElse(indexOfPlayer, serverObject);		
+							if(thisUser(indexOfPlayer))moveEveryoneElse(indexOfPlayer, serverObject);
+							otherPlayerMove(indexOfPlayer, serverObject);
 						}
 
 						//players.get(indexOfPlayer).updateCoordinates(serverObject);
@@ -318,8 +319,7 @@ public class Client {
 			return myChat.getUsername().equals(usernames.get(indexOfPlayer));
 		}
 		
-		public void moveEveryoneElse(int indexOfPlayer, ServerObject serverObject){
-			try{
+		public void moveEveryoneElse(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {
 				//if(thisUser(indexOfPlayer)){
 					for(PlayerMob eryElse : players){
 						if(eryElse == players.get(indexOfPlayer)){
@@ -335,10 +335,11 @@ public class Client {
 						}
 					}
 				}*/
-			}
-			catch(IndexOutOfBoundsException e){
-				//Do Nothing
-			}
+		
+		}
+		
+		public void otherPlayerMove(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {
+			players.get(indexOfPlayer).readMove(serverObject, indexOfPlayer);
 		}
 		
 		public void addNewUser(ServerObject serverObject){

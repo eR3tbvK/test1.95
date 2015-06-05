@@ -202,19 +202,6 @@ public class PlayerMob extends JPanel implements Serializable {
 			networkStartup.keyReleased(xMove, horVert,xCoordinate);
 		}
 	}
-
-	/*public void setThisPlayer (ServerObject clientObj, ServerObject servObj){
-		if(clientObj == servObj){
-			user = true;
-		}else{
-			user = false;
-		}
-	}
-	*/
-	public void standStill(){
-		realXMove = 0;
-		realYMove = 0;
-	}
 	
 	public void readMove(ServerObject servObj, int index){
 		info = servObj;
