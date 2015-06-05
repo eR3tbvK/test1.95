@@ -292,6 +292,7 @@ public class Client {
 						if(newUser){
 							addNewUser(serverObject);
 							
+							
 							/*for(PlayerMob player : players){
 								player.updateCoordinates(serverObject);
 							}*/
