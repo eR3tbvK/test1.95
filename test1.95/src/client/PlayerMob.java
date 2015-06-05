@@ -1,10 +1,10 @@
 package client;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -45,6 +45,7 @@ public class PlayerMob extends JPanel implements Serializable {
 	private ServerObject info;
 	private boolean user;
 	private int speed = 3;
+	private ServerObject clientObject;
 
 	public PlayerMob(Client netStartup) {
 		networkStartup = netStartup;
@@ -229,12 +230,9 @@ public class PlayerMob extends JPanel implements Serializable {
 	}
 
 	public void updateCoordinates(ServerObject servObj){
-		//to do the weird movement is here
 		if(realXMove == 0 && realYMove == 0){
-			xCoordinate = servObj.getXCoordinate();
-		}
-		if(realXMove == 0 && realYMove == 0){
-			yCoordinate = servObj.getYCoordinate();
+				xCoordinate = servObj.getXCoordinate();
+				yCoordinate = servObj.getYCoordinate();
 		}
 		
 	}
@@ -248,8 +246,10 @@ public class PlayerMob extends JPanel implements Serializable {
 
 	}
 	
+	
 	public void setClientServUsername(ServerObject servObj, ServerObject clientObject){
 		if(!servObj.getArrayList().isEmpty()){
+			this.clientObject = clientObject;
 			clientUsername = clientObject.getUsername();
 			username = servObj.getUsername();
 		}

@@ -280,8 +280,7 @@ public class Client {
 					if(!serverObject.getUsername().equals("undefined")){
 						appendMessageIfNotNull(serverObject);		
 						//System.out.println("\n\n at the beginning " + System.currentTimeMillis());
-						
-						
+
 						try{
 							indexOfPlayer = serverObject.getArrayList().indexOf(serverObject.getUsername());
 							logoutHandler(serverObject);
@@ -292,10 +291,14 @@ public class Client {
 						Boolean newUser = ((usernames.indexOf(serverObject.getUsername()) < 0 || usernames.indexOf(serverObject.getUsername()) >= usernames.size()));
 						if(newUser){
 							addNewUser(serverObject);
+							
+							/*for(PlayerMob player : players){
+								player.updateCoordinates(serverObject);
+							}*/
 							players.get(indexOfPlayer).updateCoordinates(serverObject);
 						}
 						else{
-							if(thisUser(indexOfPlayer))moveEveryoneElse(indexOfPlayer, serverObject);
+							if(thisUser(indexOfPlayer))	moveEveryoneElse(indexOfPlayer, serverObject);
 							otherPlayerMove(indexOfPlayer, serverObject);
 						}
 
@@ -312,15 +315,14 @@ public class Client {
 			catch(Exception ex) {
 				ex.printStackTrace();
 			}
-			
+
 		}
-		
+
 		public boolean thisUser(int indexOfPlayer){
 			return myChat.getUsername().equals(usernames.get(indexOfPlayer));
 		}
-		
+
 		public void moveEveryoneElse(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {
-				//if(thisUser(indexOfPlayer)){
 					for(PlayerMob eryElse : players){
 						if(eryElse == players.get(indexOfPlayer)){
 							players.get(indexOfPlayer).readMove(serverObject, indexOfPlayer);
@@ -328,14 +330,6 @@ public class Client {
 							eryElse.worldMove(serverObject,indexOfPlayer);
 						}
 					}
-				/*}else{
-					for(PlayerMob eryElse : players){
-						if(eryElse == players.get(indexOfPlayer)){
-							players.get(indexOfPlayer).readMove(serverObject, indexOfPlayer);
-						}
-					}
-				}*/
-		
 		}
 		
 		public void otherPlayerMove(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {
@@ -356,7 +350,6 @@ public class Client {
 		public void logoutHandler(ServerObject serverObject){
 			if(serverObject.getArrayList().size() > usernames.size() || serverObject.getArrayList().size() < usernames.size()){
 				usersIn = 1;
-				//System.out.println("in the userIn: " + userIn);
 			}
 
 			if(usersIn == 1 && serverObject.getArrayList().size() < usernames.size()){
@@ -371,9 +364,7 @@ public class Client {
 				players.remove(removeIndex);
 				inGame.setPlayers(players,removeIndex);
 				
-				//userIn = false;
 				usersIn = 0;
-				//logoutCounter ++;
 			}
 		}
 
