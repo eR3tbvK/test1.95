@@ -136,16 +136,14 @@ public class InGame{
 				while(true){
 					
 					startTime = System.nanoTime();
-						/*
- 
 					try {
 						//System.out.println("before Sleep");
-						Thread.sleep(14);
+						Thread.sleep(30);
 						//System.out.println("after sleep");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-						*/
+						
 					
 					panel.remove(layeredPane);
 					Iterator<PlayerMob> allPlayers = players.iterator();
@@ -175,7 +173,7 @@ public class InGame{
 						continue;
 					}
 					
-					delay();
+					//delay();
 					
 				}
 			}catch (NullPointerException ed){
@@ -193,6 +191,7 @@ public class InGame{
 			
 			URDTimeMillis = (System.nanoTime() - startTime) / 1000000;
 			waitTime = targetTime - URDTimeMillis;
+			System.out.println(waitTime);
 			
 			try {
 				
