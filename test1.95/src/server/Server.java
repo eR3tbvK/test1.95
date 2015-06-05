@@ -1,10 +1,16 @@
 package server;
 
+import client.Login;
 import client.ServerObject;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
 import javax.swing.JPanel;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 
@@ -19,8 +25,10 @@ public class Server {
 	static JPanel serverPanel;
 	
 	public static void main(String[] args){
+		ApplicationContext factory = new ClassPathXmlApplicationContext("spring.xml");
 		//new ChatServer().go();  //Old way of doing it.
-		Server server = new Server();	//New and improved way
+		//Server server = new Server();	//New and improved way
+		Server server = factory.getBean("server",Server.class);
 		server.go();
 	}
 
@@ -65,7 +73,6 @@ public class Server {
 					serverObject.setArrayList(usernames);
 
 					tellEveryone(serverObject);
-					System.out.println(System.currentTimeMillis());
 				}
 			}
 			catch(SocketException e){

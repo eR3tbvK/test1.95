@@ -11,6 +11,7 @@
 
 <bean id="loginPage" class="client.Login" />
 <bean id="inGame" class="client.InGame" />
+<bean id="server" class="server.Server" />
 
 <bean name="loggingAspect" class="logging.loggingAspect"	/>
 
