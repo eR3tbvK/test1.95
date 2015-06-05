@@ -133,13 +133,12 @@ public class Server {
 									System.err.println("Removing terminated user from clientOutputStreams the index is:" + clientOutputStreams.indexOf(out));
 
 									
-								if(usernames.size() < removedIndex) 
-									{
+								//if(usernames.size() < removedIndex){
 									usernames.remove(removedIndex);;
 									clientObjects.remove(removedIndex);;
 									xCoordinates.remove(removedIndex);;
 									yCoordinates.remove(removedIndex);;
-									}
+									//}
 									clientOutputStreams.remove(out);
 
 								}
