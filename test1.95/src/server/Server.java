@@ -22,7 +22,6 @@ public class Server {
 	ArrayList<Integer> xCoordinates;
 	ArrayList<Integer> yCoordinates;
 	ObjectOutputStream outStream;
-	static JPanel serverPanel;
 	
 	public static void main(String[] args){
 		ApplicationContext factory = new ClassPathXmlApplicationContext("spring.xml");
@@ -49,26 +48,31 @@ public class Server {
 			Object clientObject = null;
 			try{
 				while ((clientObject = inStream.readUnshared()) != null){
-					System.out.println(System.currentTimeMillis());
+					//System.out.println(System.currentTimeMillis());
 					ServerObject serverObject = (ServerObject) clientObject;
 					//the casted fressh new object that came in
 					serverObject.setArrayList(usernames);
-					if(serverObject.getUsername().equals("undefined")){
+					Boolean undefinedUser = serverObject.getUsername().equals("undefined");
+					int clientIndex = usernames.indexOf(serverObject.getUsername());
+
+					if(undefinedUser){
 						tellThisGuy(clientObjects,usernames.size());
 					}
-					if(!serverObject.getUsername().equals("undefined") && serverObject.getArrayList().indexOf(serverObject.getUsername()) < 0){
+					if(!undefinedUser && serverObject.getArrayList().indexOf(serverObject.getUsername()) < 0){
 						System.out.println("New User Logged in: " + serverObject.getUsername());
 
 						usernames.add(serverObject.getUsername());
+						clientIndex = usernames.indexOf(serverObject.getUsername()); //update clientIndex since we just added to usernames
+						
 						clientObjects.add(serverObject);
-						tellThisGuy(clientObjects,usernames.indexOf(serverObject.getUsername()));
+						tellThisGuy(clientObjects,clientIndex);
 						xCoordinates.add(serverObject.getXCoordinate());
 						yCoordinates.add(serverObject.getYCoordinate());
 					}
-					else if(!serverObject.getUsername().equals("undefined") && usernames.indexOf(serverObject.getUsername()) >= 0){
-						clientObjects.set(usernames.indexOf(serverObject.getUsername()), serverObject);
-						xCoordinates.set(usernames.indexOf(serverObject.getUsername()),serverObject.getXCoordinate());
-						yCoordinates.set(usernames.indexOf(serverObject.getUsername()),serverObject.getYCoordinate());
+					else if(!undefinedUser && clientIndex >= 0){
+						clientObjects.set(clientIndex, serverObject);
+						xCoordinates.set(clientIndex,serverObject.getXCoordinate());
+						yCoordinates.set(clientIndex,serverObject.getYCoordinate());
 					}
 					serverObject.setArrayList(usernames);
 
@@ -162,47 +166,27 @@ public class Server {
 		}
 		
 		//The object gets sent to the ONE client it has One Job Oneee Job
-		public void tellThisGuy(ArrayList<ServerObject> clientObjects, int thisInt){
-			
+		public void tellThisGuy(ArrayList<ServerObject> clientObjects, int thisInt) throws IOException{
 			Iterator<ServerObject> clientObject = clientObjects.iterator();
 			ObjectOutputStream thisGuy = null;
-			
 			thisGuy = clientOutputStreams.get(thisInt);
-				try{
-							
-							while(clientObject.hasNext()){
-								synchronized(thisGuy){	thisGuy.writeUnshared(clientObject.next());}
-								thisGuy.reset();
-							}
-						
-				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
+		
+			while(clientObject.hasNext()){
+				synchronized(thisGuy){	thisGuy.writeUnshared(clientObject.next());}
+				thisGuy.reset();
+			}	
 		}
 		
 		//The object gets sent out to every client
-		public void tellEveryone(Object one){
+		public void tellEveryone(Object one) throws IOException{
 			Iterator<ObjectOutputStream> it = clientOutputStreams.iterator();
 			ObjectOutputStream out = null;
 
-				try{
-						while(it.hasNext()){
-							out = (ObjectOutputStream) it.next();
-							synchronized(out){out.writeUnshared(one);}
-							out.reset();
-						}
-				}
-				catch(SocketException ex){
-					System.err.println("SocketException caught");
-				}
-				catch(Exception ex){
-					ex.printStackTrace();
-				}
-		}
+			while(it.hasNext()){
+				out = (ObjectOutputStream) it.next();
+				synchronized(out){out.writeUnshared(one);}
+				out.reset();
+			}
 
-		public void setJPanel(JPanel serverPane) {
-			// TODO Auto-generated method stub
-			serverPanel = serverPane;
 		}
 }

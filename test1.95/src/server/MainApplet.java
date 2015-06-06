@@ -20,8 +20,6 @@ public class MainApplet extends JApplet{
 		serverPane.setOpaque(true);
 		setSize(600,400);
 		setContentPane(serverPane);
-		
-		//server.setJPanel(serverPane);
 		server.go();
 
 		
