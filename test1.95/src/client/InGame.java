@@ -158,20 +158,12 @@ public class InGame{
 					panel.add(BorderLayout.CENTER,layeredPane);
 					panel.validate();
 					panel.repaint();
-
-					try{
-						for(int i=0;  i< players.size(); i++){
-							if (playerIndex != i && players.get(playerIndex).getBounds().intersects(players.get(i).getBounds())){
-								//System.out.println("A COLLISION HAPPENED with player " + i);
-								if(players.get(playerIndex).getCross()){
-									players.get(i).setKnockedOut(true);
-								}
-							}
-						}
-					}catch(IndexOutOfBoundsException ex){
+					//try{
+					collisionDetection();
+					/*}catch(IndexOutOfBoundsException ex){
 						System.err.println("for loop index catch");
 						continue;
-					}
+					}*/
 					
 					//delay();
 					
@@ -186,6 +178,18 @@ public class InGame{
 			}
 		}
 		
+		public void collisionDetection() throws IndexOutOfBoundsException{
+			
+				for(int i=0;  i< players.size(); i++){
+					if (playerIndex != i && players.get(playerIndex).getBounds().intersects(players.get(i).getBounds())){
+						//System.out.println("A COLLISION HAPPENED with player " + i);
+						if(players.get(playerIndex).getCross()){
+							players.get(i).setKnockedOut(true);
+						}
+					}
+				}
+			
+		}
 		
 		public void delay(){
 			

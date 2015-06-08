@@ -296,6 +296,8 @@ public class Client {
 							/*for(PlayerMob player : players){
 								player.updateCoordinates(serverObject);
 							}*/
+							System.out.println("usernames: " + usernames);
+							System.out.println("indexOfPlayer: " + indexOfPlayer);
 							players.get(indexOfPlayer).updateCoordinates(serverObject);
 						}
 						else{

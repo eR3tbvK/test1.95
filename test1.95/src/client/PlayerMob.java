@@ -270,8 +270,9 @@ public class PlayerMob extends JPanel implements Serializable {
 		super.paintComponent(g);
 		if(knockedOut){
 			//System.out.println("You just got knocked out!!!");
-			xCoordinate = -50;
-			yCoordinate = 200;
+			this.setVisible(false);
+			//xCoordinate = -50;
+			//yCoordinate = 200;
 			knockedOut = false;
 		}
 		else{
@@ -322,7 +323,12 @@ public class PlayerMob extends JPanel implements Serializable {
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle(xCoordinate,yCoordinate,80,80);
+		if(username.equals(clientUsername)){
+			return new Rectangle(300,150,80,80);
+		}else{
+			return new Rectangle(xCoordinate,yCoordinate,80,80);
+		}
+		
 	}
 	
 }

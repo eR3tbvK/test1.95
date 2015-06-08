@@ -43,9 +43,21 @@ public class Server {
 			}
 		}
 		
+		public void updateClientsInfo(int clientIndex, ServerObject serverObject){
+			clientObjects.set(clientIndex, serverObject);
+			xCoordinates.set(clientIndex,serverObject.getXCoordinate());
+			yCoordinates.set(clientIndex,serverObject.getYCoordinate());
+		}
+		
+		public void addCoordinates(ServerObject serverObject){
+			xCoordinates.add(serverObject.getXCoordinate());
+			yCoordinates.add(serverObject.getYCoordinate());
+		}
+		
 		//The object comes in from a client
 		public void run(){
 			Object clientObject = null;
+			
 			try{
 				while ((clientObject = inStream.readUnshared()) != null){
 					//System.out.println(System.currentTimeMillis());
@@ -66,13 +78,10 @@ public class Server {
 						
 						clientObjects.add(serverObject);
 						tellThisGuy(clientObjects,clientIndex);
-						xCoordinates.add(serverObject.getXCoordinate());
-						yCoordinates.add(serverObject.getYCoordinate());
+						addCoordinates(serverObject);
 					}
 					else if(!undefinedUser && clientIndex >= 0){
-						clientObjects.set(clientIndex, serverObject);
-						xCoordinates.set(clientIndex,serverObject.getXCoordinate());
-						yCoordinates.set(clientIndex,serverObject.getYCoordinate());
+						updateClientsInfo(clientIndex, serverObject);
 					}
 					serverObject.setArrayList(usernames);
 
