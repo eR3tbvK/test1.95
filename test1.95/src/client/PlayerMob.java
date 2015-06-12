@@ -268,6 +268,11 @@ public class PlayerMob extends JPanel implements Serializable {
 		//g.setColor(Color.ORANGE);
 		//g.fillOval(0, 0, 100, 100);
 		super.paintComponent(g);
+		
+		//g.setColor(Color.ORANGE);
+		//g.fillRect(0,0,115,150);
+		//this.setBounds(xCoordinate,yCoordinate,10,10);
+		
 		if(knockedOut){
 			//System.out.println("You just got knocked out!!!");
 			this.setVisible(false);
@@ -306,12 +311,12 @@ public class PlayerMob extends JPanel implements Serializable {
 			
 			
 			if(username.equals(clientUsername)){
-				//this.setBounds(xCoordinate, yCoordinate, 134, 150);
+				this.setBounds(xCoordinate, yCoordinate, 134, 150);
 				this.setBounds(300, 150, 134, 150);
 				
 				networkStartup.moveBackground(info, index);
 			}else{
-				//System.out.println(username + "is moving");
+				System.out.println(username + "is moving");
 				this.setBounds(xCoordinate, yCoordinate, 134, 150);
 			}
 			
@@ -323,12 +328,44 @@ public class PlayerMob extends JPanel implements Serializable {
 	}
 	
 	public Rectangle getBounds() {
+	
 		if(username.equals(clientUsername)){
-			return new Rectangle(300,150,80,80);
-		}else{
-			return new Rectangle(xCoordinate,yCoordinate,80,80);
+			xCoordinate = 300;
+			yCoordinate = 150;
 		}
 		
+		if(faceRight){
+			if(cross){
+				return new Rectangle(xCoordinate+120,yCoordinate+40,10,10);
+			}else{
+				return new Rectangle(xCoordinate,yCoordinate,115,150);
+			}
+		}else if(faceLeft) {
+			if(cross){
+				return new Rectangle(xCoordinate,yCoordinate+40,10,10);
+			}else{
+				return new Rectangle(xCoordinate,yCoordinate,115,150);
+			}
+		}else if(faceUp) {
+			if(cross){
+				return new Rectangle(xCoordinate+25,yCoordinate+15,10,10);
+			}else{
+				return new Rectangle(xCoordinate,yCoordinate,115,150);
+			}
+		}else if(faceDown) {
+			if(cross){
+				return new Rectangle(xCoordinate+25,yCoordinate+135,10,10);
+			}else{
+				return new Rectangle(xCoordinate,yCoordinate,115,150);
+			}
+		}else{
+			if(cross){
+				return new Rectangle(xCoordinate+120,yCoordinate+40,10,10);
+			}else{
+				return new Rectangle(xCoordinate,yCoordinate,115,150);
+			}
+		}
 	}
+	
 	
 }

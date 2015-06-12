@@ -180,14 +180,14 @@ public class InGame{
 		
 		public void collisionDetection() throws IndexOutOfBoundsException{
 			
-				for(int i=0;  i< players.size(); i++){
+			for(int i=0;  i< players.size(); i++){
+				if(players.get(playerIndex).getCross()){
 					if (playerIndex != i && players.get(playerIndex).getBounds().intersects(players.get(i).getBounds())){
 						//System.out.println("A COLLISION HAPPENED with player " + i);
-						if(players.get(playerIndex).getCross()){
-							players.get(i).setKnockedOut(true);
-						}
+						players.get(i).setKnockedOut(true);
 					}
 				}
+			}
 			
 		}
 		
