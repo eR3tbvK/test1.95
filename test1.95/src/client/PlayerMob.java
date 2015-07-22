@@ -10,8 +10,8 @@ import javax.swing.*;
 
 public class PlayerMob extends JPanel implements Serializable {
 	private static final long serialVersionUID = 2;
-	private int xCoordinate;
-	private int yCoordinate;
+	private int xCoordinate = 300;
+	private int yCoordinate = 150;
 
 	private Boolean faceDown = false;
 	private Boolean faceUp = false;
@@ -44,8 +44,12 @@ public class PlayerMob extends JPanel implements Serializable {
 	private int index;
 	private ServerObject info;
 	private boolean user;
-	private int speed = 3;
+	private int speed = 1;
 	private ServerObject clientObject;
+	private int worldYMove;
+	private int worldXMove;
+	private int readYMove;
+	private int readXMove;
 
 	public PlayerMob(Client netStartup) {
 		networkStartup = netStartup;
@@ -67,6 +71,13 @@ public class PlayerMob extends JPanel implements Serializable {
         this.setBounds(300, 150, 134, 150);
 	}
 
+	public int getRealXMove(){
+		return realXMove;
+	}
+	public int getRealYMove(){
+		return realYMove;
+	}
+	
 	public void setXCoordinate(int xCoordinate){
 		this.xCoordinate = xCoordinate;
 	}
@@ -211,8 +222,8 @@ public class PlayerMob extends JPanel implements Serializable {
 			this.username = servObj.getUsername();
 			//Makes it so only a user with the specific username can move the circle
 			if(servObj.getUsername().equals(servObj.getArrayList().get(index))){  
-				realXMove = servObj.getXMove();
-				realYMove = servObj.getYMove();
+				readXMove = servObj.getXMove();
+				readYMove = servObj.getYMove();
 			}
 		}
 
@@ -223,8 +234,8 @@ public class PlayerMob extends JPanel implements Serializable {
 			
 			//Makes it so only a user with the specific username can move the circle
 			if(servObj.getUsername().equals(servObj.getArrayList().get(index))){ 
-				realXMove = -servObj.getXMove();
-				realYMove = -servObj.getYMove();
+				worldXMove = -servObj.getXMove();
+				worldYMove = -servObj.getYMove();
 			}
 		}
 	}
@@ -234,6 +245,14 @@ public class PlayerMob extends JPanel implements Serializable {
 		if(realXMove == 0 && realYMove == 0){
 				xCoordinate = servObj.getXCoordinate();
 				yCoordinate = servObj.getYCoordinate();
+		}
+		
+	}
+	
+	public void updateOthersCoordinates(int xCoordinate, int yCoordinate){
+		if(realXMove == 0 && realYMove == 0){
+				this.xCoordinate = xCoordinate;
+				this.yCoordinate = yCoordinate;
 		}
 		
 	}
@@ -257,6 +276,8 @@ public class PlayerMob extends JPanel implements Serializable {
 	}
 
 	public void move(){
+		realXMove = readXMove + worldXMove;
+		realYMove = readYMove + worldYMove;
 		xCoordinate += realXMove;
 		yCoordinate += realYMove;
 		
@@ -316,7 +337,7 @@ public class PlayerMob extends JPanel implements Serializable {
 				
 				networkStartup.moveBackground(info, index);
 			}else{
-				System.out.println(username + "is moving");
+				//System.out.println(username + "is moving");
 				this.setBounds(xCoordinate, yCoordinate, 134, 150);
 			}
 			

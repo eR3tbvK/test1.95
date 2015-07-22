@@ -143,7 +143,6 @@ public class InGame{
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-						
 					
 					panel.remove(layeredPane);
 					Iterator<PlayerMob> allPlayers = players.iterator();

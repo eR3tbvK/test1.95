@@ -1,10 +1,9 @@
 package client;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -56,7 +55,7 @@ public class Client {
 		//create a socket connection to the server on port 5000, and outputstream, inputstream 
 		//and have a thread call the IncomingReader method
 		try {
-			sock = new Socket("localhost",5000);
+			sock = new Socket("10.16.38.47",5000);
 			outputStream = new ObjectOutputStream(sock.getOutputStream());
 			inputStream = new ObjectInputStream(sock.getInputStream());
 
@@ -222,6 +221,7 @@ public class Client {
 	public void keyReleased(Boolean vertMove, int yMove,int yCoordinate){	
 		try{
 			myChat.setYMove(yMove);
+			userIndex = usernames.indexOf(myChat.getUsername());
 			if(players.get(userIndex) != null) myChat.setYCoordinate(players.get(userIndex).getYCoordinate());
 			if(players.get(userIndex) != null) myChat.setXCoordinate(players.get(userIndex).getXCoordinate());
 			myChat.setMessage(null);
@@ -291,17 +291,32 @@ public class Client {
 						Boolean newUser = ((usernames.indexOf(serverObject.getUsername()) < 0 || usernames.indexOf(serverObject.getUsername()) >= usernames.size()));
 						if(newUser){
 							addNewUser(serverObject);
-							
-							
 							/*for(PlayerMob player : players){
 								player.updateCoordinates(serverObject);
 							}*/
 							System.out.println("usernames: " + usernames);
 							System.out.println("indexOfPlayer: " + indexOfPlayer);
+							//players.get(indexOfPlayer).updateCoordinates(serverObject);
+							players.get(indexOfPlayer).updateOthersCoordinates(serverObject.getXCoordinate() - getXInWorld(indexOfPlayer), serverObject.getYCoordinate() - getYInWorld(indexOfPlayer));
+							System.out.println("indexOfPlayer: " + indexOfPlayer);
+							//System.out.println("\n\n\n" + getXInWorld(indexOfPlayer) + " " + getYInWorld(indexOfPlayer));
+							
+							/*if(thisUser(indexOfPlayer)  && usernames.size() > 1){
+							players.get(indexOfPlayer).updateOthersCoordinates(serverObject.getXCoordinate() - getXInWorld(indexOfPlayer), serverObject.getYCoordinate());
+						}else{
 							players.get(indexOfPlayer).updateCoordinates(serverObject);
+							//players.get(1).updateOtherCoordinates(serverObject);
+						}*/
+							
+							/*if(thisUser(indexOfPlayer)  && usernames.size() > 1){
+								players.get(indexOfPlayer).updateOthersCoordinates(serverObject.getXCoordinate() - getXInWorld(indexOfPlayer), serverObject.getYCoordinate());
+							}else{
+								players.get(indexOfPlayer).updateCoordinates(serverObject);
+								//players.get(1).updateOtherCoordinates(serverObject);
+							}*/
 						}
 						else{
-							if(thisUser(indexOfPlayer))	moveEveryoneElse(indexOfPlayer, serverObject);
+							if(thisUser(indexOfPlayer)){	moveEveryoneElse(indexOfPlayer, serverObject);}
 							otherPlayerMove(indexOfPlayer, serverObject);
 						}
 
@@ -320,19 +335,46 @@ public class Client {
 			}
 
 		}
+		
+		public int getXInWorld(int indexOfPlayer){
+			int xInWorld = 0; 
+			if(players.size() > 1 && thisUserIndex() >= 0){
+				//xInWorld = players.get(0).getXCoordinate() - players.get(indexOfPlayer).getXCoordinate();
+				xInWorld = players.get(thisUserIndex()).getXCoordinate() - 300;
+				System.out.println("----getXInWorld thisUserIndex()-----\n thisUserIndex(): " + thisUserIndex() + players.get(thisUserIndex()).getXCoordinate() + "  " + players.get(indexOfPlayer).getXCoordinate() + "\n" + xInWorld);
+			}
+			return xInWorld;
+		}
+		
+		public int getYInWorld(int indexOfPlayer){
+			int yInWorld = 0; 
+			if(players.size() > 1  && thisUserIndex() >= 0){
+				yInWorld = players.get(thisUserIndex()).getYCoordinate() - 150;
+				//yInWorld = players.get(0).getYCoordinate() - players.get(indexOfPlayer).getYCoordinate();
+			}
+			return yInWorld;
+		}
 
 		public boolean thisUser(int indexOfPlayer){
 			return myChat.getUsername().equals(usernames.get(indexOfPlayer));
 		}
+		
+		public int thisUserIndex(){
+			int index = 0;
+			for(String username : usernames){
+				if(myChat.getUsername().equals(username)){
+					return index;
+				}
+				index ++;
+			}
+			return -1;
+		}
+		
 
 		public void moveEveryoneElse(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {
-					for(PlayerMob eryElse : players){
-						if(eryElse == players.get(indexOfPlayer)){
-							players.get(indexOfPlayer).readMove(serverObject, indexOfPlayer);
-						}else{
-							eryElse.worldMove(serverObject,indexOfPlayer);
-						}
-					}
+				for(PlayerMob eryElse : players){
+					eryElse.worldMove(serverObject,indexOfPlayer);
+				}
 		}
 		
 		public void otherPlayerMove(int indexOfPlayer, ServerObject serverObject) throws IndexOutOfBoundsException {

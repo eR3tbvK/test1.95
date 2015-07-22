@@ -36,6 +36,12 @@ public class Background extends JPanel implements Serializable {
 			e.printStackTrace();
 		}
 	}
+	public int getXCoordinate() {
+		return xCoordinate;
+	}
+	public int getYCoordinate() {
+		return yCoordinate;
+	}
 	public void paintComponent(Graphics g){
 		g.drawImage(background, 0,0, null);
 		this.setOpaque(false);

@@ -84,7 +84,10 @@ public class Server {
 						updateClientsInfo(clientIndex, serverObject);
 					}
 					serverObject.setArrayList(usernames);
-
+					for(ServerObject servO: clientObjects){
+					System.out.println("xCoor: " + servO.getXCoordinate() + " yCoor: " + servO.getYCoordinate());
+					}
+					System.out.println("");
 					tellEveryone(serverObject);
 				}
 			}
